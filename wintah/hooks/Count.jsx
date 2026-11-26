@@ -1,52 +1,69 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 
 const Count = () => {
   const [count, setCount] = useState(0)
   const [isVisible, setIsVisible] = useState(true)
+  const [buttonPresses, setButtonPresses] = useState(0)
+
+  useEffect(() => {
+    if (buttonPresses > 0) {
+      console.log('useEffect called')
+    }
+  }, [buttonPresses])
+
+  const handleCounterClick = (event) => {
+    if (event.target.closest('button')) {
+      setButtonPresses((presses) => presses + 1)
+    }
+  }
 
   return (
-    <main className="flex min-h-screen flex-col items-start gap-5 p-6 text-left">
-      <p className="text-4xl leading-tight">Count:{count}</p>
+    <section aria-label="Counter" onClick={handleCounterClick}>
+      <output className="block">Count:{count}</output>
+      <div className="flex flex-wrap items-center gap-1">
+        <Button type="button" onClick={() => setCount((currentCount) => currentCount + 1)}>
+          Increase
+        </Button>
+        <Button type="button" variant="destructive" onClick={() => setCount(0)}>
+          reset
+        </Button>
+      </div>
       <Button
-        size="lg"
-        className="h-20 rounded-3xl px-7 text-3xl"
-        onClick={() => setCount((currentCount) => currentCount + 1)}
+        type="button"
+        aria-expanded={isVisible}
+        onClick={() => setIsVisible((visible) => !visible)}
       >
-        Increase
+        Toggle
       </Button>
-      <div className="flex flex-wrap items-center gap-2">
+      {isVisible && (
+        <p>
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nisi dolores minus omnis
+          eligendi maiores id quam pariatur tempore et, quaerat minima nobis voluptatibus esse.
+        </p>
+      )}
+      <div className="flex flex-wrap items-center">
         <Button
+          type="button"
           variant="destructive"
-          size="lg"
-          className="h-16 px-6 text-3xl"
-          onClick={() => setCount(count -1)}
+          onClick={() => setCount((currentCount) => currentCount - 1)}
         >
           Delete
         </Button>
-        <Button variant="destructive" size="lg" className="h-16 px-6 text-3xl"
-                onClick = {() => setCount(0)}>
-          Reset
-        </Button>
-        <Button onClick={() => setIsVisible(!isVisible)} size="lg" className="h-16 px-6 text-3xl">
-          Toggle
-        </Button>
-        {isVisible && (
-            <p> Hello, World! </p>)}   
-        <Button variant="outline" size="lg" className="h-16 px-6 text-3xl">
+        <Button type="button" variant="outline">
           Outline
         </Button>
-        <Button variant="secondary" size="lg" className="h-16 px-6 text-3xl">
+        <Button type="button" variant="secondary">
           secondary
         </Button>
-        <Button variant="ghost" size="lg" className="h-16 px-6 text-3xl">
+        <Button type="button" variant="ghost">
           Ghost
         </Button>
       </div>
-      <p className="text-4xl leading-tight">This is test</p>
-      <p className="text-4xl leading-tight">Students</p>
-      <p className="text-4xl leading-tight">I am user and age is 20</p>
-    </main>
+      <p>This is test</p>
+      <p>Students</p>
+      <p>I am user and age is 20</p>
+    </section>
   )
 }
 
